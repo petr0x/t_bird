@@ -1,11 +1,11 @@
 ###############################################################################
-# Makefile for the project tbird
+# Makefile for the project lcd
 ###############################################################################
 
 ## General Flags
-PROJECT = tbird
+PROJECT = lcd
 MCU = atmega128
-TARGET = tbird.elf
+TARGET = lcd.elf
 CC = avr-gcc
 
 CPP = avr-g++
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=tbird.map
+LDFLAGS +=  -Wl,-Map=lcd.map
 
 
 ## Intel Hex file production flags
@@ -37,19 +37,16 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = tbird.o lcd.o 
+OBJECTS = main.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) tbird.hex tbird.eep tbird.lss size
+all: $(TARGET) lcd.hex lcd.eep lcd.lss size
 
 ## Compile
-tbird.o: ../tbird.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-lcd.o: ../lcd.c
+main.o: ../main.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
@@ -72,7 +69,7 @@ size: ${TARGET}
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) tbird.elf dep/* tbird.hex tbird.eep tbird.lss tbird.map
+	-rm -rf $(OBJECTS) lcd.elf dep/* lcd.hex lcd.eep lcd.lss lcd.map
 
 
 ## Other dependencies

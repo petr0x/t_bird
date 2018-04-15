@@ -16,7 +16,8 @@ void main(){
 	init();
 
 	for(;;){
-		showOnSegment(readButton(),matrixValue());
+
+		
 	}
 }
 
@@ -33,10 +34,6 @@ void showOnLed(char x){
 
 	PORTD = x;
 	PORTB = (x << 4);
-}
-
-void showOnSegment(char digit, char data){
-	PORTA |= (0b10000000 | digit << 4 | data);
 }
 
 char matrixValue(){
