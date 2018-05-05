@@ -4,22 +4,6 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-void init();
-void showOnLed(char);
-void showOnSegment(char,char);
-char matrixValue();
-char readButton();
-
-
-void main(){	
-	
-	init();
-
-	for(;;){
-
-		
-	}
-}
 
 void init(){
 	
