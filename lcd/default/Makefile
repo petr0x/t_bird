@@ -36,8 +36,14 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
+## Include Directories
+INCLUDES = -I"C:\T-bird\lcd\." -I"C:\T-bird\lcd\.." 
+
+## Library Directories
+LIBDIRS = -L"C:\T-bird\lcd\." -L"C:\T-bird" 
+
 ## Objects that must be built in order to link
-OBJECTS = main.o 
+OBJECTS = main.o lcd.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -47,6 +53,9 @@ all: $(TARGET) lcd.hex lcd.eep lcd.lss size
 
 ## Compile
 main.o: ../main.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+lcd.o: ../lcd.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

@@ -19,6 +19,7 @@ Linker script and memory map
 Address of section .data set to 0x800100
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm128.o
 LOAD main.o
+LOAD lcd.o
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
@@ -113,7 +114,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x1ae
+.text           0x00000000      0x20c
  *(.vectors)
  .vectors       0x00000000       0x8c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm128.o
                 0x00000000                __vectors
@@ -202,21 +203,25 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
                 0x000000ba                __vector_16
                 0x000000ba                __vector_18
                 0x000000ba                __vector_20
- .text          0x000000be       0xec main.o
-                0x00000112                LCD_init
-                0x0000019e                main
-                0x000000be                LCD_sendEnable
-                0x00000178                LCD_sendData
-                0x000000e0                LCD_sendCommand
- .text          0x000001aa        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x000001aa                . = ALIGN (0x2)
+ .text          0x000000be        0xc main.o
+                0x000000be                main
+ .text          0x000000ca      0x13e lcd.o
+                0x000001be                LCD_setCursor
+                0x00000198                LCD_sendString
+                0x0000011e                LCD_init
+                0x000001f8                LCD_clrearScreen
+                0x000000ca                LCD_sendEnable
+                0x00000166                LCD_sendData
+                0x000000ec                LCD_sendCommand
+ .text          0x00000208        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x00000208                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x000001aa        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x000001aa                . = ALIGN (0x2)
+ .text.libgcc   0x00000208        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x00000208                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000001aa        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x000001aa                exit
-                0x000001aa                _exit
+ .fini9         0x00000208        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x00000208                exit
+                0x00000208                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -235,15 +240,16 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000001aa        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000208        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000001ae                _etext = .
+                0x0000020c                _etext = .
 
-.data           0x00800100        0x0 load address 0x000001ae
+.data           0x00800100        0x0 load address 0x0000020c
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm128.o
  .data          0x00800100        0x0 main.o
+ .data          0x00800100        0x0 lcd.o
  .data          0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.data*)
  *(.rodata)
@@ -258,12 +264,13 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.bss)
  .bss           0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtm128.o
  .bss           0x00800100        0x0 main.o
+ .bss           0x00800100        0x0 lcd.o
  .bss           0x00800100        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.bss*)
  *(COMMON)
                 0x00800100                PROVIDE (__bss_end, .)
-                0x000001ae                __data_load_start = LOADADDR (.data)
-                0x000001ae                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000020c                __data_load_start = LOADADDR (.data)
+                0x0000020c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800100        0x0
                 0x00800100                PROVIDE (__noinit_start, .)
@@ -321,42 +328,52 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x20
+.debug_aranges  0x00000000       0x40
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 main.o
+ .debug_aranges
+                0x00000020       0x20 lcd.o
 
 .debug_pubnames
-                0x00000000       0x60
+                0x00000000       0xac
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000       0x60 main.o
+                0x00000000       0x1b main.o
+ .debug_pubnames
+                0x0000001b       0x91 lcd.o
 
-.debug_info     0x00000000      0x2a8
+.debug_info     0x00000000      0x345
  *(.debug_info)
- .debug_info    0x00000000      0x2a8 main.o
+ .debug_info    0x00000000       0x75 main.o
+ .debug_info    0x00000075      0x2d0 lcd.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000       0xeb
+.debug_abbrev   0x00000000      0x143
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xeb main.o
+ .debug_abbrev  0x00000000       0x3f main.o
+ .debug_abbrev  0x0000003f      0x104 lcd.o
 
-.debug_line     0x00000000      0x253
+.debug_line     0x00000000      0x2e3
  *(.debug_line)
- .debug_line    0x00000000      0x253 main.o
+ .debug_line    0x00000000       0x63 main.o
+ .debug_line    0x00000063      0x280 lcd.o
 
-.debug_frame    0x00000000       0x60
+.debug_frame    0x00000000       0xa0
  *(.debug_frame)
- .debug_frame   0x00000000       0x60 main.o
+ .debug_frame   0x00000000       0x20 main.o
+ .debug_frame   0x00000020       0x80 lcd.o
 
-.debug_str      0x00000000       0xe9
+.debug_str      0x00000000      0x120
  *(.debug_str)
- .debug_str     0x00000000       0xe9 main.o
-                                0x11d (size before relaxing)
+ .debug_str     0x00000000       0x64 main.o
+                                 0x98 (size before relaxing)
+ .debug_str     0x00000064       0xbc lcd.o
+                                0x145 (size before relaxing)
 
-.debug_loc      0x00000000       0xff
+.debug_loc      0x00000000      0x175
  *(.debug_loc)
- .debug_loc     0x00000000       0xff main.o
+ .debug_loc     0x00000000      0x175 lcd.o
 
 .debug_macinfo
  *(.debug_macinfo)
