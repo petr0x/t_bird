@@ -68,7 +68,7 @@ void LCD_setCursor(unsigned char row, unsigned char pos){
 	}
 }
 
-void LCD_clrearScreen(void){
+void LCD_clearScreen(void){
 	LCD_sendCommand(0x01);
 	LCD_setCursor(0,0);
 }

@@ -3,9 +3,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include "tbird.h"
 
 
-void init(){
+void init_tbird(){
 	
 	DDRB = DDRD = 0xF0; // Ledek kimenetbe állítása
 	DDRA = 0xFF;		// 7 szegmens kiement
@@ -14,13 +15,13 @@ void init(){
 
 }
 
-void showOnLed(char x){
+void showOnLed(unsigned char x){
 
 	PORTD = x;
 	PORTB = (x << 4);
 }
 
-char matrixValue(){
+unsigned char matrixValue(){
 	
 	char row;
 	char state = 0;
@@ -35,10 +36,10 @@ char matrixValue(){
 		switch((~PINC) & 0b111){
 			case 1:
 				if(!state){
-					if(row == 8) value = 1;
-					else if(row == 16) value = 4;
-					else if(row == 32) value = 7;
-					else if(row == 64) value = 10;
+					if(row == 8) value = '1';
+					else if(row == 16) value = '4';
+					else if(row == 32) value = '7';
+					else if(row == 64) value = '*';
 					
 					state = 1;
 					break;
@@ -46,20 +47,20 @@ char matrixValue(){
 				}
 			case 2:
 				if(!state){
-					if(row == 8) value = 2; 
-					else if(row == 16) value = 5;
-					else if(row == 32) value = 8;
-					else if(row == 64) value = 0xFF;
+					if(row == 8) value = '2'; 
+					else if(row == 16) value = '5';
+					else if(row == 32) value = '8';
+					else if(row == 64) value = '0';
 				
 					state = 1;
 					break;
 				}
 			case 4:
 				if(!state){
-					if(row == 8) value = 3; 
-					else if(row == 16) value = 6;
-					else if(row == 32) value = 9;
-					else if(row == 64) value = 11;
+					if(row == 8) value = '3'; 
+					else if(row == 16) value = '6';
+					else if(row == 32) value = '9';
+					else if(row == 64) value = '#';
 				
 					state = 1;
 					break;
@@ -74,7 +75,7 @@ char matrixValue(){
 	return 0;
 }
 
-char readButton(){
+unsigned char readButton(){
 
 	return (PING & 0x1F);
 

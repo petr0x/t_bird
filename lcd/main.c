@@ -3,6 +3,7 @@
 #include <avr/io.h>
 #include "lcd.h"
 #include "tbird.h"
+#include "usart.h"
 
 #define F_CPU 16000000UL;
 
