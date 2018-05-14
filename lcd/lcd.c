@@ -7,7 +7,7 @@
 void LCD_init(void){
 
 	_delay_ms(20);
-	//írány regiszterek beállítása
+
 	DDRF |= 0x0E;
 	DDRE |= 0xF0;
 
@@ -24,27 +24,30 @@ void LCD_init(void){
 }	
 
 void LCD_sendEnable(void){
-	_delay_ms(1);
-	CTRL |= 0b0001000;
-	_delay_ms(1);
-	CTRL &= 0b11110111;
+	_delay_ms(15);
+	CTRL |= (1 << ENABLE);
+	_delay_ms(15);
+	CTRL &= ~(1 << ENABLE);
 }
 
 void LCD_sendCommand(unsigned char command){
-	// RS 0-ba
-	CTRL &=  0xFD;
-	// data ra a command felső 4 bite
+
+	CTRL &= ~(1 << RS);
+	CTRL &= ~(1 << RW);
+
 	DATA = (command&0xF0);
 	LCD_sendEnable();
-	// data ra a command also 4 bite
 	DATA = ((command<<4)&0xF0);
 	LCD_sendEnable();
 
 }
 
 void LCD_sendData(unsigned char data){
-	CTRL |= 0b00000010;
-	DATA = data&0xF0;
+
+	CTRL |= (1 << RS);
+	CTRL &= ~(1 << RW);
+
+	DATA = (data&0xF0);
 	LCD_sendEnable();
 	DATA = ((data<<4)&0xF0);
 	LCD_sendEnable();
@@ -71,4 +74,17 @@ void LCD_setCursor(unsigned char row, unsigned char pos){
 void LCD_clearScreen(void){
 	LCD_sendCommand(0x01);
 	LCD_setCursor(0,0);
+}
+
+void LCD_waitBusy(void){
+	
+	DDRE &= 0x0F;
+	CTRL &= ~(1 << RS);
+	CTRL |= (1 << RW);
+	LCD_sendEnable();
+	while(PE7){
+		LCD_sendEnable();
+		LCD_sendEnable();
+	}
+	DDRE |= 0xF0;
 }
