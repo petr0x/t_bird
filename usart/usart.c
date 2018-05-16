@@ -1,5 +1,5 @@
 
-#define F_CPU 16000000UL
+#define F_CPU 8000000UL
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -8,7 +8,7 @@
 
 void USART_init(unsigned int baud){
 
-	baud=(FOSC/16/baud-1);
+	baud=(F_CPU/16/baud-1);
 
 	UBRR1H = (baud>>8); //Set baud Rate
 	UBRR1L = baud;
@@ -20,11 +20,9 @@ void USART_init(unsigned int baud){
 void USART_transmit(unsigned char data)
 {
 
-	PORTD1 = 1;
 	if(!data) return;
 	while ( !( UCSR1A & (1<<UDRE1)) );
 	UDR1 = data;
-	PORTD1= 0;
 }
 
 unsigned char USART_receive(void)

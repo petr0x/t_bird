@@ -2,7 +2,7 @@
 #include <util/delay.h>
 #include "lcd.h"
 
-#define F_CPU 16000000UL;
+#define F_CPU 8000000UL;
 
 void LCD_init(void){
 
@@ -24,9 +24,9 @@ void LCD_init(void){
 }	
 
 void LCD_sendEnable(void){
-	_delay_ms(15);
+	_delay_ms(20);
 	CTRL |= (1 << ENABLE);
-	_delay_ms(15);
+	_delay_ms(20);
 	CTRL &= ~(1 << ENABLE);
 }
 

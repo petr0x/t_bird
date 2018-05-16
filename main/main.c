@@ -1,11 +1,11 @@
+#define F_CPU 8000000UL
+
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <avr/io.h>
 #include "lcd.h"
 #include "tbird.h"
 #include "usart.h"
-
-#define F_CPU 16000000UL
 
 void init(void);
 void selectRole(void);
@@ -17,10 +17,11 @@ int main(){
 	init();
 
 	selectRole();
+
 	sei();
 
 	while(1){
-		USART_transmit(matrixValue());
+		
 	}
 }
 
@@ -29,7 +30,7 @@ void init(void){
 	LCD_init();
 	USART_init(9600);
 	DDRD |= 0x03;
-	PORTD0 = 1;
+	PORTD &= 0xFC;
 }
 
 void selectRole(){
