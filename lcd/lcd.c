@@ -1,8 +1,8 @@
-#include <avr/io.h>
-#include <util/delay.h>
+#include "tbird.h"
 #include "lcd.h"
 
-#define F_CPU 8000000UL;
+#include <avr/io.h>
+#include <util/delay.h>
 
 void LCD_init(void){
 
@@ -24,13 +24,15 @@ void LCD_init(void){
 }	
 
 void LCD_sendEnable(void){
-	_delay_ms(20);
+	_delay_ms(20);					// lejebb kell venni
 	CTRL |= (1 << ENABLE);
 	_delay_ms(20);
 	CTRL &= ~(1 << ENABLE);
 }
 
 void LCD_sendCommand(unsigned char command){
+
+	//LCD_waitBusy();
 
 	CTRL &= ~(1 << RS);
 	CTRL &= ~(1 << RW);
@@ -43,6 +45,8 @@ void LCD_sendCommand(unsigned char command){
 }
 
 void LCD_sendData(unsigned char data){
+
+	//LCD_waitBusy();
 
 	CTRL |= (1 << RS);
 	CTRL &= ~(1 << RW);
@@ -77,14 +81,26 @@ void LCD_clearScreen(void){
 }
 
 void LCD_waitBusy(void){
+
+	char busy = 0;
 	
 	DDRE &= 0x0F;
+
 	CTRL &= ~(1 << RS);
 	CTRL |= (1 << RW);
-	LCD_sendEnable();
-	while(PE7){
-		LCD_sendEnable();
-		LCD_sendEnable();
+
+	CTRL |= (1 << ENABLE);
+
+	busy = PINE;  //PE7 busy flag
+
+	while(busy >> 7){
+
+		CTRL &= ~(1 << ENABLE);
+		CTRL |= (1 << ENABLE);
+		busy = PORTE;
+
 	}
+
+	CTRL &= ~(1 << ENABLE);
 	DDRE |= 0xF0;
 }
