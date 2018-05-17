@@ -1,11 +1,10 @@
-#define F_CPU 8000000UL
+#include "tbird.h"
+#include "lcd.h"
+#include "usart.h"
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <avr/io.h>
-#include "lcd.h"
-#include "tbird.h"
-#include "usart.h"
 
 void init(void);
 void selectRole(void);
@@ -66,12 +65,10 @@ void selectRole(){
 	}
 }
 
-ISR(USART1_RX_vect){
+ISR(USART1_RX_vect){			// RX complete interrupt
 	UCSR1B &= ~(1<<RXCIE1);
 
-	LCD_clearScreen();
-	LCD_sendData(USART_receive());
-	LCD_setCursor(0,0);
-	
+	//code
+
 	UCSR1B |= (1<<RXCIE1);
 }
