@@ -1,14 +1,13 @@
-#define F_CPU 8000000UL
+#include "tbird.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "tbird.h"
 
 
 void init_tbird(){
 	
-	DDRB = DDRD = 0xF0; // Ledek kimenetbe ·llÌt·sa
+	DDRB = DDRD = 0xF0; // Ledek kimenetbe √°ll√≠t√°sa
 	DDRA = 0xFF;		// 7 szegmens kiement
 	DDRC = 0xF8;		// RED kimenet sorok kimenet, oszlopok bemenet
 	DDRG = 0xE0;		// Gombok bemenet
