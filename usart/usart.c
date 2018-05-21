@@ -1,10 +1,10 @@
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
 
 #include "tbird.h"
 #include "usart.h"
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
 
 void USART_init(unsigned int baud){
 

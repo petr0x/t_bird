@@ -37,13 +37,13 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\T-bird\main\..\usart" -I"C:\T-bird\main\..\tbird" -I"C:\T-bird\main\..\lcd" 
+INCLUDES = -I"C:\T-bird\main\..\usart" -I"C:\T-bird\main\..\tbird" -I"C:\T-bird\main\..\lcd" -I"C:\T-bird\main\..\fifo" 
 
 ## Library Directories
-LIBDIRS = -L"C:\T-bird\tbird" -L"C:\T-bird\usart" -L"C:\T-bird\lcd" 
+LIBDIRS = -L"C:\T-bird\usart" -L"C:\T-bird\lcd" -L"C:\T-bird\tbird" -L"C:\T-bird\fifo" 
 
 ## Objects that must be built in order to link
-OBJECTS = main.o lcd.o usart.o tbird.o 
+OBJECTS = main.o lcd.o usart.o tbird.o fifo.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -62,6 +62,9 @@ usart.o: ../../usart/usart.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 tbird.o: ../../tbird/tbird.c
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+fifo.o: ../../fifo/fifo.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

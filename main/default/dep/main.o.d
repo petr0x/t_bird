@@ -12,8 +12,8 @@ main.o: ../main.c \
   c:/winavr-20100110/lib/gcc/../../avr/include/avr/lock.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h \
-  C:\T-bird\main\..\lcd/lcd.h C:\T-bird\main\..\tbird/tbird.h \
-  C:\T-bird\main\..\usart/usart.h
+  C:\T-bird\main\..\tbird/tbird.h C:\T-bird\main\..\lcd/lcd.h \
+  C:\T-bird\main\..\usart/usart.h C:\T-bird\main\..\fifo/fifo.h
 
 c:/winavr-20100110/lib/gcc/../../avr/include/avr/interrupt.h:
 
@@ -41,8 +41,10 @@ c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:
 
 c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h:
 
-C:\T-bird\main\..\lcd/lcd.h:
-
 C:\T-bird\main\..\tbird/tbird.h:
 
+C:\T-bird\main\..\lcd/lcd.h:
+
 C:\T-bird\main\..\usart/usart.h:
+
+C:\T-bird\main\..\fifo/fifo.h:

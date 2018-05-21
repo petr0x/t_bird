@@ -1,15 +1,20 @@
-#include "tbird.h"
-#include "lcd.h"
-#include "usart.h"
-
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <avr/io.h>
+
+#include "tbird.h"
+#include "lcd.h"
+#include "usart.h"
+#include "fifo.h"
+
 
 void init(void);
 void selectRole(void);
 
 char role = 0;
+
+static FIFO recive;
+static unsigned char reciveArray[64]; 
 
 int main(){
 
@@ -20,7 +25,9 @@ int main(){
 	sei();
 
 	while(1){
-		
+		_delay_ms(100000);
+		LCD_sendData(FIFO_getElement(&recive));
+
 	}
 }
 
@@ -28,6 +35,7 @@ void init(void){
 	init_tbird();
 	LCD_init();
 	USART_init(9600);
+	FIFO_init(&recive,reciveArray,64);
 	DDRD |= 0x03;
 	PORTD &= 0xFC;
 }
@@ -65,10 +73,11 @@ void selectRole(){
 	}
 }
 
-ISR(USART1_RX_vect){			// RX complete interrupt
+ISR(USART1_RX_vect){
+			// RX complete interrupt
 	UCSR1B &= ~(1<<RXCIE1);
 
-	//code
-
+	FIFO_storeElement(&recive, UDR1);
+	
 	UCSR1B |= (1<<RXCIE1);
 }

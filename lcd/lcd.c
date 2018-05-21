@@ -1,8 +1,9 @@
+#include <avr/io.h>
+#include <util/delay.h>
+
 #include "tbird.h"
 #include "lcd.h"
 
-#include <avr/io.h>
-#include <util/delay.h>
 
 void LCD_init(void){
 
@@ -24,9 +25,9 @@ void LCD_init(void){
 }	
 
 void LCD_sendEnable(void){
-	_delay_ms(20);					// lejebb kell venni
+	_delay_us(300);					// lejebb kell venni
 	CTRL |= (1 << ENABLE);
-	_delay_ms(20);
+	_delay_us(300);
 	CTRL &= ~(1 << ENABLE);
 }
 
@@ -86,15 +87,16 @@ void LCD_waitBusy(void){
 	
 	DDRE &= 0x0F;
 
+	CTRL |= (1 << ENABLE);
 	CTRL &= ~(1 << RS);
 	CTRL |= (1 << RW);
 
-	CTRL |= (1 << ENABLE);
 
 	busy = PINE;  //PE7 busy flag
 
-	while(busy >> 7){
+	while((busy >> 7)){
 
+		showOnLed(busy);
 		CTRL &= ~(1 << ENABLE);
 		CTRL |= (1 << ENABLE);
 		busy = PORTE;
