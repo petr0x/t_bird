@@ -3,7 +3,7 @@
 
 typedef struct{
 
-	unsigned char* dataArray;
+	unsigned char* array;
 	unsigned char bufferSize;
 	unsigned char readIndex;
 	unsigned char writeIndex;
@@ -12,8 +12,8 @@ typedef struct{
 	
 }FIFO;
 
-void FIFO_init(FIFO*, unsigned char*, unsigned char);
+void FIFO_init(FIFO *, unsigned char *, unsigned char);
 unsigned char FIFO_getElement(FIFO *);
-unsigned char FIFO_storeElement(FIFO *, unsigned char)
+unsigned char FIFO_storeElement(FIFO *, unsigned char);
 
 #endif

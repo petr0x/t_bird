@@ -40,7 +40,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 INCLUDES = -I"C:\T-bird\main\..\usart" -I"C:\T-bird\main\..\tbird" -I"C:\T-bird\main\..\lcd" -I"C:\T-bird\main\..\fifo" 
 
 ## Library Directories
-LIBDIRS = -L"C:\T-bird\usart" -L"C:\T-bird\lcd" -L"C:\T-bird\tbird" -L"C:\T-bird\fifo" 
+LIBDIRS = -L"C:\T-bird\lcd" -L"C:\T-bird\tbird" -L"C:\T-bird\usart" -L"C:\T-bird\fifo" 
 
 ## Objects that must be built in order to link
 OBJECTS = main.o lcd.o usart.o tbird.o fifo.o 

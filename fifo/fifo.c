@@ -16,6 +16,7 @@ unsigned char FIFO_getElement(FIFO *fifo){
 	unsigned char data;
 
 	data = fifo -> array[fifo -> readIndex];
+	fifo -> readIndex++;
 	fifo -> readIndex %= fifo -> numberOfElements;
 	fifo -> numberOfElements--;
 
@@ -24,9 +25,9 @@ unsigned char FIFO_getElement(FIFO *fifo){
 
 unsigned char FIFO_storeElement(FIFO *fifo, unsigned char data){
 
-	if(fifo -> bufferSize == fifo -> numberOfElements) return 0;
+	if((fifo -> bufferSize) == (fifo -> numberOfElements)) return 0;
 
-	fifo -> array[writeIndex] = data;
+	(fifo -> array[fifo -> writeIndex]) = data;
 	fifo -> writeIndex++;
 	fifo -> writeIndex %= fifo-> bufferSize;
 	fifo -> numberOfElements++;

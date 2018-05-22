@@ -1,8 +1,9 @@
+#include "tbird.h"
+#include "lcd.h"
+
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "tbird.h"
-#include "lcd.h"
 
 
 void LCD_init(void){
@@ -58,7 +59,7 @@ void LCD_sendData(unsigned char data){
 	LCD_sendEnable();
 }
 
-void LCD_sendString(unsigned char *str){
+void LCD_sendString(char *str){
 	unsigned char i;
 	for(i = 0; str[i] != 0; i++){
 		LCD_sendData(str[i]);
@@ -87,9 +88,9 @@ void LCD_waitBusy(void){
 	
 	DDRE &= 0x0F;
 
-	CTRL |= (1 << ENABLE);
 	CTRL &= ~(1 << RS);
 	CTRL |= (1 << RW);
+	CTRL |= (1 << ENABLE);
 
 
 	busy = PINE;  //PE7 busy flag

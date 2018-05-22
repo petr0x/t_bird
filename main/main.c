@@ -1,20 +1,23 @@
-#include <avr/interrupt.h>
-#include <util/delay.h>
-#include <avr/io.h>
+//#define TBIRD3
 
 #include "tbird.h"
 #include "lcd.h"
 #include "usart.h"
 #include "fifo.h"
 
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include <avr/io.h>
+
+
 
 void init(void);
 void selectRole(void);
 
-char role = 0;
+unsigned char role = 0, i='a';
 
-static FIFO recive;
-static unsigned char reciveArray[64]; 
+FIFO recieve;
+unsigned char recieveArray[128]; 
 
 int main(){
 
@@ -24,10 +27,19 @@ int main(){
 
 	sei();
 
+	LCD_clearScreen();
 	while(1){
-		_delay_ms(100000);
-		LCD_sendData(FIFO_getElement(&recive));
-
+		if(role == 1){
+			for(i = 'a'; i<= 'z'; i++){
+				USART_transmit(i);
+				_delay_ms(500);
+			}
+		}
+		else{
+		//	i = FIFO_getElement(&recieve);
+		//	if(!i) continue;
+		//	showOnLed(i);
+		}
 	}
 }
 
@@ -35,9 +47,8 @@ void init(void){
 	init_tbird();
 	LCD_init();
 	USART_init(9600);
-	FIFO_init(&recive,reciveArray,64);
-	DDRD |= 0x03;
-	PORTD &= 0xFC;
+	RS485_init();
+	FIFO_init(&recieve,recieveArray,128);
 }
 
 void selectRole(){
@@ -66,18 +77,30 @@ void selectRole(){
 			LCD_sendString("Press K0");
 			LCD_setCursor(3,0);
 			LCD_sendString("to start RS485");
+			RS485_busToTransmit();
 		}break;
-		case 2: LCD_sendString("Matrix"); break;
-		case 4: LCD_sendString("LEDs"); break;
-		case 8: LCD_sendString("LCD"); break;
+
+		case 2:{
+			LCD_sendString("Matrix");
+			RS485_busToRecieve(); 
+		}break;
+
+		case 4:{
+			LCD_sendString("LEDs");
+			RS485_busToRecieve();  
+		}break;
+
+		case 8:{
+			LCD_sendString("LCD");
+			RS485_busToRecieve();  
+		}break;
 	}
 }
 
 ISR(USART1_RX_vect){
-			// RX complete interrupt
-	UCSR1B &= ~(1<<RXCIE1);
 
-	FIFO_storeElement(&recive, UDR1);
-	
-	UCSR1B |= (1<<RXCIE1);
+	//FIFO_storeElement(&recieve, UDR1);
+	char asd = UDR1;
+	showOnLed(asd);
+
 }

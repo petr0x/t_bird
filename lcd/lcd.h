@@ -12,7 +12,7 @@ void LCD_init(void);
 void LCD_sendEnable(void);
 void LCD_sendCommand(unsigned char);
 void LCD_sendData(unsigned char);
-void LCD_sendString(unsigned char*);
+void LCD_sendString(char*);
 void LCD_setCursor(unsigned char, unsigned char);
 void LCD_clearScreen(void);
 void LCD_waitBusy(void);
