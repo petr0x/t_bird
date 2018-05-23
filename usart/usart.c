@@ -22,13 +22,13 @@ void USART_init(unsigned int baud){
 void USART_transmit(unsigned char data){
 
 	if(!data) return;
-	while ( !( UCSR1A & (1<<UDRE1)) );
+	while (! (UCSR1A & (1 << UDRE1)));
 	UDR1 = data;
 }
 
 unsigned char USART_receive(void){
 
-	while ( !(UCSR1A & (1<<RXC)) );
+	while (! (UCSR1A & (1 << RXC)));
 	return UDR1;
 }
 

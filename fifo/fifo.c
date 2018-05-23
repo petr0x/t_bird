@@ -17,7 +17,7 @@ unsigned char FIFO_getElement(FIFO *fifo){
 
 	data = fifo -> array[fifo -> readIndex];
 	fifo -> readIndex++;
-	fifo -> readIndex %= fifo -> numberOfElements;
+	fifo -> readIndex %= fifo -> bufferSize;
 	fifo -> numberOfElements--;
 
 	return data;

@@ -3,7 +3,6 @@
 
 #define DATA PORTE
 #define CTRL PORTF
-#define BUSY PORTE7
 #define ENABLE PORTF3
 #define RW PORTF2
 #define RS PORTF1

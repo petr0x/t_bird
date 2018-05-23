@@ -1,4 +1,4 @@
-//#define TBIRD3
+#define TBIRD3
 
 #include "tbird.h"
 #include "lcd.h"
@@ -14,10 +14,10 @@
 void init(void);
 void selectRole(void);
 
-unsigned char role = 0, i='a';
+unsigned char role = 0, i;
 
 FIFO recieve;
-unsigned char recieveArray[128]; 
+unsigned char recieveArray[50]; 
 
 int main(){
 
@@ -30,15 +30,16 @@ int main(){
 	LCD_clearScreen();
 	while(1){
 		if(role == 1){
-			for(i = 'a'; i<= 'z'; i++){
+			for(i = 'a'; i<= 'f'; i++){
 				USART_transmit(i);
 				_delay_ms(500);
 			}
 		}
 		else{
-		//	i = FIFO_getElement(&recieve);
-		//	if(!i) continue;
-		//	showOnLed(i);
+			_delay_ms(600);
+			i = FIFO_getElement(&recieve);
+			if(!i) continue;
+			LCD_sendData(i);
 		}
 	}
 }
@@ -48,7 +49,7 @@ void init(void){
 	LCD_init();
 	USART_init(9600);
 	RS485_init();
-	FIFO_init(&recieve,recieveArray,128);
+	FIFO_init(&recieve,recieveArray,50);
 }
 
 void selectRole(){
@@ -99,8 +100,6 @@ void selectRole(){
 
 ISR(USART1_RX_vect){
 
-	//FIFO_storeElement(&recieve, UDR1);
-	char asd = UDR1;
-	showOnLed(asd);
-
+	FIFO_storeElement(&recieve, UDR1);
+	
 }

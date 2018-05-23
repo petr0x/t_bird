@@ -26,15 +26,15 @@ void LCD_init(void){
 }	
 
 void LCD_sendEnable(void){
-	_delay_us(300);					// lejebb kell venni
+	//_delay_ms(1);					// lejebb kell venni
 	CTRL |= (1 << ENABLE);
-	_delay_us(300);
+	//_delay_ms(1);
 	CTRL &= ~(1 << ENABLE);
 }
 
 void LCD_sendCommand(unsigned char command){
 
-	//LCD_waitBusy();
+	LCD_waitBusy();
 
 	CTRL &= ~(1 << RS);
 	CTRL &= ~(1 << RW);
@@ -48,7 +48,7 @@ void LCD_sendCommand(unsigned char command){
 
 void LCD_sendData(unsigned char data){
 
-	//LCD_waitBusy();
+	LCD_waitBusy();
 
 	CTRL |= (1 << RS);
 	CTRL &= ~(1 << RW);
@@ -83,8 +83,6 @@ void LCD_clearScreen(void){
 }
 
 void LCD_waitBusy(void){
-
-	char busy = 0;
 	
 	DDRE &= 0x0F;
 
@@ -92,15 +90,11 @@ void LCD_waitBusy(void){
 	CTRL |= (1 << RW);
 	CTRL |= (1 << ENABLE);
 
+	while((PINE >> 7)){
 
-	busy = PINE;  //PE7 busy flag
-
-	while((busy >> 7)){
-
-		showOnLed(busy);
 		CTRL &= ~(1 << ENABLE);
 		CTRL |= (1 << ENABLE);
-		busy = PORTE;
+		_delay_ms(1);
 
 	}
 
